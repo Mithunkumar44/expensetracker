@@ -10,6 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from django.db.models import Sum
 from django.utils import timezone
+from expensetracker_app.permissions import IsOwner
 
 
 # Create your views here.
@@ -27,7 +28,7 @@ class SignUpViewset(ViewSet):
 
 class ExpenseView(ViewSet):
     authentication_classes=[TokenAuthentication]
-    permission_classes=[IsAuthenticated]
+    permission_classes=[IsOwner]
     def create(self,request):
         dser=ExpensesSerializer(data=request.data)
         if dser.is_valid():
@@ -85,7 +86,7 @@ class ExpenseView(ViewSet):
 
 class ExpenseSummaryView(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsOwner]
     def get(self,request):
         cur_date=timezone.now()
         print(cur_date)
